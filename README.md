@@ -1,4 +1,4 @@
-# 2627CLxServos
+# 2627CLxServos - <u>clase en borrador</u>
 
 Indice evolutivo del las clases del taller + libros y webs de referencia:
 
@@ -8,15 +8,27 @@ Indice evolutivo del las clases del taller + libros y webs de referencia:
 
 ### Tópicos que se van a cubrir
 
-- Que es un servo 0-180º y como controlarlo
+1- Conceptos teóricos previos: Ondas cuadradas
 
-- Calibración de servos 0-180º
+- Electrónica: Ondas cuadradas
 
-- Control de servo (sin POO = programación orientada a objetos)
+- Ondas cuadradas PWM 
 
-- Iniciación a POO
+- Usos de ondas cuadradas en robotica - intro
+  
+  - uso pseudo analógico
+  
+  - uso puro de onda cuadrada
 
-- Control de servos con POO
+2- Que es un servo 0-180º y como controlarlo con ondas cuadradas PWM
+
+3- Calibración de servos 0-180º
+
+4- Control de servo (sin POO = programación orientada a objetos)
+
+5- Iniciación a POO
+
+6- Control de servos con POO
 
 #### Materiales necesarios
 
@@ -45,23 +57,27 @@ Indice evolutivo del las clases del taller + libros y webs de referencia:
 
 ---
 
-## Que es un servo 0-180º y como controlarlo
+## 1. Conceptos teóricos previos: Ondas cuadradas
 
+### 1.1 Electrónica: Ondas cuadradas
 
+### 1.2 Ondas cuadradas PWM
 
-### Señales de onda cuadrada PWM
+### 1.3 Usos de ondas cuadradas en robotica - intro
 
+#### 1.3.1 Uso pseudo analógico
 
+#### 1.3.2 Uso puro de onda cuadrada
 
+## 2. Que es un servo 0-180º y como controlarlo con PWM básico
 
+## 3. Calibración de servos 0-180º
 
-## Calibración de servos 0-180º
+## 4. Control de servo (sin Programación Orientada a Objetos)
 
-## Control de servo (sin Programación Orientada a Objetos)
+## 5. Iniciación a POO: Programación Orientada a Objetos
 
-## Iniciación a POO: Programación Orientada a Objetos
-
-## Control de servos con POO
+## 6. Control de servos con POO
 
 ---
 
