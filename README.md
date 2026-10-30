@@ -1,4 +1,4 @@
-# 2627CL03_Servos - <u>clase en borrador</u>
+# 2627CL03_Servos - sin y con POO <u>clase en borrador</u>
 
 Indice evolutivo del las clases del taller + libros y webs de referencia:
 
