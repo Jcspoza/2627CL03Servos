@@ -57,19 +57,43 @@ Alimentar el servo a +5volt y conectar el cable de control del servo SIG al GPIO
 
 ---
 
-## Documentación de soporte
+## Documentación de soporte - antigua
 
-Clases 6 y 7 de robotica CMM BML de 2023
+[Clases 6 y 7 de robotica CMM BML de 2023](./doc/CMM_MK_Servo.pdf)
 
-- Que es un servo 0-180º y como controlarlo con ondas cuadradas PWM
-  
-  1. Hoja de datos del servo mas típico de robotica [SG90](SG90_a.pdf)
-  
-  2. Básico sobre señal de control PWM
+## Que es un servo 0-180º y como controlarlo con ondas cuadradas PWM
 
-- Calibración de servos 0-180º
+### Hoja de datos del servo mas típico de robotica [SG90](./doc/SG90_a.pdf)
 
-- Control de servo ( sin usar POO)
+[Explicaciones sobre la hoja de datos del SG90 ](./doc/datasheet_SG90_explicado.pdf)
+
+[Entender las implicaciones de la dead band](./doc/SG90_deadband.pdf)
+
+
+
+### Básico sobre señal de control PWM
+
+Ver cualquiera de las tutoriales
+
+[Historia de porque se usan señales PWM para le control de los servos ](./doc/Historia_PWM_servos.pdf)
+
+## Calibración de servos 0-180º
+
+Estudiar y ejecutar programa
+
+[R2627_servo_calibra_v1_0.py](R2627_servo_calibra_v1_0.py)
+
+Es conveniente hacer un pequeño montaje de cartón y papel para poder calibra el servo , ver foto con un ejemplo
+
+![](./calibrar_servos.jpg)
+
+## Control de servo ( sin usar POO)
+
+Estudiar y ejecutar programa
+
+[R2627_servo_in_deg_v1_4.py](R2627_servo_in_deg_v1_4.py)
+
+---
 
 ## Iniciación a POO : Programación orientada a objetos
 
