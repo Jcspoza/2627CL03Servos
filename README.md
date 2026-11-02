@@ -39,21 +39,25 @@ Alimentar el servo a +5volt y conectar el cable de control del servo SIG al GPIO
 
 ### Enlaces a tutoriales e información
 
-| Tutorial                                                                                                                                 | Nivel  | Notas                                                           |
-| ---------------------------------------------------------------------------------------------------------------------------------------- | ------ | --------------------------------------------------------------- |
-| [Tutorial SF servo](https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/component/component_servo.html)                           | Básico | programa : [R2627_servo_demo.py](R2627_servo_demo.py)           |
-| https://www.luisllamas.es/micropython-servomotores-pwm/                                                                                  | Medio  |                                                                 |
-| https://learn.sparkfun.com/tutorials/hobby-servo-tutorial/                                                                               |        | Muy completo                                                    |
-| https://robots-argentina.com.ar/didactica/manejo-preciso-de-servos-en-arduino-grados-y-milisegundos/                                     |        | Para explicar calibración                                       |
-| [tutorial de POO en nuestra referencia Python 'el libro de Python'](https://ellibrodepython.com/programacion-orientada-a-objetos-python) | Medio  | para explicar POO en Python, pero vale para micropython tambien |
+| Tutorial                                                                                                                                  | Nivel  | Notas                                                           |
+| ----------------------------------------------------------------------------------------------------------------------------------------- | ------ | --------------------------------------------------------------- |
+| [Tutorial SF servo](https://docs.sunfounder.com/projects/pico-2w-kit/en/latest/component/component_servo.html)                            | Básico | programa : R2627_servo_demo.py, No usa duty_ns                  |
+| [Luis Llamas - Clase servo avanzada](https://www.luisllamas.es/micropython-servomotores-pwm/)                                             | Medio  |                                                                 |
+| https://learn.sparkfun.com/tutorials/hobby-servo-tutorial/                                                                                |        | Muy completo                                                    |
+| https://robots-argentina.com.ar/didactica/manejo-preciso-de-servos-en-arduino-grados-y-milisegundos/                                      |        | Para explicar calibración                                       |
+| [tutorial de POO en nuestra referencia Python 'el libro de Python'](https://ellibrodepython.com/programacion-orientada-a-objetos-python)  | Medio  | para explicar POO en Python, pero vale para micropython también |
+| [Composición vs herencia en Python](https://realpython.com/inheritance-composition-python/)                                               | Medio  | Elección entre composición o herencia en POO en Python          |
+| [clase servo simple](https://picockpit.com/raspberry-pi/es/how-to-control-servo-with-raspberry-pi-pico-w-and-pulse-width-modulation-pwm/) |        | Algo antiguo , clase servo simple                               |
 
 ### Programas importantes de la clase
 
-| Programa                                                   | Montaje  | Objetivo                                                                    | Notas                      |
-| ---------------------------------------------------------- | -------- | --------------------------------------------------------------------------- | -------------------------- |
-| [R2627_servo_demo.py](R2627_servo_demo.py)                 | ServoM#1 | Ver movimiento de un servo                                                  | Sin calibrar               |
-| [R2627_servo_calibra_v1_0.py](R2627_servo_calibra_v1_0.py) | ServoM#1 | Calibrar un servo de 0º a 180º con 3 parámetros                             |                            |
-| [R2627_servo_in_deg_v1_4.py](R2627_servo_in_deg_v1_4.py)   | ServoM#1 | Mover de 0º a 180º un servo con precision usando los valores de calibracion | Calibrado con 3 parametros |
+| Programa                                                   | Montaje  | Objetivo                                                                                            | Notas                      |
+| ---------------------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------- | -------------------------- |
+| [R2627_servo_demo.py](R2627_servo_demo.py)                 | ServoM#1 | Ver movimiento de un servo de 0º a 180º SIN calibrar                                                | Sin calibrar               |
+| [R2627_servo_calibra_v1_0.py](R2627_servo_calibra_v1_0.py) | ServoM#1 | Calibrar un servo de 0º a 180º con 3 parámetros                                                     |                            |
+| [R2627_servo_in_deg_v1_4.py](R2627_servo_in_deg_v1_4.py)   | ServoM#1 | Fijar posición de un servo entre 0º a 180º un servo con precisión usando los valores de calibración | Calibrado con 3 parámetros |
+| [LibServo180v1.py](LibServo180v1.py)                       | ServoM#1 | Libreria para manejar un servo 500 a 2500 us hecha en 2023                                          | Calibrado con 3 parámetros |
+|                                                            |          |                                                                                                     |                            |
 
 ---
 
@@ -68,8 +72,6 @@ Alimentar el servo a +5volt y conectar el cable de control del servo SIG al GPIO
 [Explicaciones sobre la hoja de datos del SG90 ](./doc/datasheet_SG90_explicado.pdf)
 
 [Entender las implicaciones de la dead band](./doc/SG90_deadband.pdf)
-
-
 
 ### Básico sobre señal de control PWM
 
@@ -115,6 +117,109 @@ Ver el [tutorial  de POO en nuestra referencia Python 'el libro de Python'](http
 
 ## Control de servos con POO
 
+### Decisiones de diseño: composición vs herencia + parámetros del constructor
+
+Consulta la intro a la POO en Python en 
+
+[tutorial de POO en nuestra referencia Python 'el libro de Python'](https://ellibrodepython.com/programacion-orientada-a-objetos-python)
+
+Para un proyecto de robótica con  **servos** en **MicroPython en Raspberry Pi Pico 2**, suele ser buena idea encapsular el servo en una clase que:
+
+- Inicialice el PWM.
+- Permita mover el servo a un ángulo (0-180°).
+- Permita calibrar cada servo con sus microsegundos concretos  0º y 180º e incluso a 90º ( si no es lineal)
+- Limite automáticamente los valores válidos.
+- Oculte los detalles del PWM al resto del programa.
+
+#### Composición vs herencia
+
+Pero antes de empezar hay que decidir si la clase servo  heredara de la clase PWM o simplemente tomara algunos componentes de PWM. 
+
+**Herencia ( is-a)** "Un servo es un PWM."
+
+```
+class Servo(PWM):
+```
+
+**Composición (has-a)** "Un servo tiene un PWM."
+
+```
+class Servo:
+    self._pwm = PWM(...)
+```
+
+La segunda es mas correcta. De hecho, este es un ejemplo clásico para explicar cuándo usar herencia y cuándo composición: un servo utiliza internamente un generador PWM, pero no es un generador PWM en sí mismo. Por eso la mayoría de bibliotecas 'servo' suelen optar por la composición.
+
+Mas técnicamente, hay un regla para eso el Principio de Sustitución de Liskov (LSP) ver  [Liskov substitution principle](https://realpython.com/solid-principles-python/#liskov-substitution-principle-lsp).
+
+La formulación clásica de Barbara Liskov dice algo parecido a:
+
+> Si S es un subtipo de T, entonces los objetos de T pueden ser reemplazados por objetos de S sin alterar las propiedades correctas del programa.
+
+En términos más prácticos:
+
+> Si una clase hereda de otra, debe poder usarse en cualquier lugar donde se espere la clase base sin que nada "extraño" ocurra.
+
+En el caso concreto de servo, un objeto `Servo` debería poder utilizarse en cualquier lugar donde el programa espere un `PWM`.
+
+```
+def configurar_pwm(pwm):
+    pwm.freq(1000)
+    pwm.duty_ns(500000)
+
+configurar_pwm(mi_servo)
+```
+
+Como mi_servo hereda de PWM, esto es legal. Pero ¿qué ocurre?
+
+```
+mi_servo.freq(1000)
+```
+
+Un SG90 ya no recibe una señal válida. La clase deja de comportarse como un servo. Has roto sus invariantes. 
+
+Un concepto muy importante en LSP es el de invariante. **Un servo típicamente necesita: 'frecuencia = 50 Hz' ,** pero en un PWM se puede cambiar libremente la frecuencia.
+
+**Regla práctica para robótica**
+
+Cuando modeles componentes físicos:
+
+Correcto:
+
+- Robot tiene motores
+
+- Motor tiene PWM
+
+- Brazo tiene servos
+
+- Servo tiene PWM
+
+**Sospechoso:**
+
+- Servo es un PWM
+
+- Robot es un Motor
+
+- Sensor es un Pin
+
+Porque normalmente los componentes físicos usan otros componentes de más bajo nivel, pero no son sustituibles por ellos. Por eso, desde el punto de vista de LSP, Servo(PWM) es técnicamente posible, pero conceptualmente débil, mientras que Servo que contiene un PWM suele ser el diseño más correcto.
+
+#### Parámetros del constructor
+
+ """
+        pin_num : GPIO conectado al servo
+        c0degus  : pulso correspondiente a 0°, obtenido en calibración
+        c180degus  : pulso correspondiente a 180°, obtenido en calibracion
+        c90degus  : pulso correspondiente a 90°, obtenido en calibracion
+            o mitad entre 0 y 180º
+    """
+
+### Libreria Servo v1
+
+Es la libreria que hice en 2023
+
+### Libreria Servo v2
+
 ---
 
-Todo:
+Todo: movimiento suave

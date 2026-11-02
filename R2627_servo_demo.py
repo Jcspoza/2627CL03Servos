@@ -24,11 +24,12 @@ print(f"Fichero del script : {p_file}")
 print(f"Valid for Microcontroler: {p_ucontroler}")
 # Informative block - End
 
-import machine
-import utime
+from machine import Pin, PWM
+from time import sleep_ms
 
 # Initialize PWM on pin GP15
 SERVO_PIN = 15
+DELAY = 20
 servo = PWM(Pin(SERVO_PIN))
 servo.freq(50) # Set the frequency to 50Hz
 
@@ -43,15 +44,16 @@ try:
         # Move servo from 0° to 180°
         for angle in range(0, 181, 1):
             servo.duty_u16(angle_to_duty(angle))
-            utime.sleep_ms(10)
+            sleep_ms(DELAY)
         # Move servo from 180° back to 0°
         for angle in range(180, -1, -1):
             servo.duty_u16(angle_to_duty(angle))
-            utime.sleep_ms(10)
+            sleep_ms(DELAY)
         
 except KeyboardInterrupt:
     print("Keyboard interrupt")
     # Turn off PWM
-    sleep_ms(100)
+    sleep_ms(1000)
     servo.deinit()
+    
 servo.deinit()
