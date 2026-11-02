@@ -32,7 +32,7 @@ class Servo:
         else:
             self.CEN_DUTY_ns = c90degus * 1000 # time pulse for 90 deg
             
-        self._angle = 90
+        self._angle = None
         self._dutyns = 0
             
     def relax(self):

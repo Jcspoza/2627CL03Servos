@@ -1,4 +1,4 @@
-# 2627CL03_Servos - sin y con POO <u>clase en borrador</u>
+# 2627CL03_Servos - sin y con POO
 
 Indice evolutivo del las clases del taller + libros y webs de referencia:
 
@@ -51,13 +51,15 @@ Alimentar el servo a +5volt y conectar el cable de control del servo SIG al GPIO
 
 ### Programas importantes de la clase
 
-| Programa                                                   | Montaje  | Objetivo                                                                                            | Notas                      |
-| ---------------------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------- | -------------------------- |
-| [R2627_servo_demo.py](R2627_servo_demo.py)                 | ServoM#1 | Ver movimiento de un servo de 0º a 180º SIN calibrar                                                | Sin calibrar               |
-| [R2627_servo_calibra_v1_0.py](R2627_servo_calibra_v1_0.py) | ServoM#1 | Calibrar un servo de 0º a 180º con 3 parámetros                                                     |                            |
-| [R2627_servo_in_deg_v1_4.py](R2627_servo_in_deg_v1_4.py)   | ServoM#1 | Fijar posición de un servo entre 0º a 180º un servo con precisión usando los valores de calibración | Calibrado con 3 parámetros |
-| [LibServo180v1.py](LibServo180v1.py)                       | ServoM#1 | Libreria para manejar un servo 500 a 2500 us hecha en 2023                                          | Calibrado con 3 parámetros |
-|                                                            |          |                                                                                                     |                            |
+| Programa                                                           | Montaje  | Objetivo                                                                                            | Notas                                     |
+| ------------------------------------------------------------------ | -------- | --------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| [R2627_servo_demo.py](R2627_servo_demo.py)                         | ServoM#1 | Ver movimiento de un servo de 0º a 180º SIN calibrar                                                | Sin calibrar                              |
+| [R2627_servo_calibra_v1_0.py](R2627_servo_calibra_v1_0.py)         | ServoM#1 | Calibrar un servo de 0º a 180º con 3 parámetros                                                     |                                           |
+| [R2627_servo_in_deg_v1_4.py](R2627_servo_in_deg_v1_4.py)           | ServoM#1 | Fijar posición de un servo entre 0º a 180º un servo con precisión usando los valores de calibración | Calibrado con 3 parámetros                |
+| [LibServo180v1.py](LibServo180v1.py)                               |          | Libreria para manejar un servo 500 a 2500 us hecha en 2023                                          | Calibrado con 3 parámetros                |
+| [R2627_servoclassv1_demo_v1_2.py](R2627_servoclassv1_demo_v1_2.py) | ServoM#1 | Una demo muy simple que usa la libreria v1                                                          |                                           |
+| [LibServo180v2.py](LibServo180v2.py)                               |          | Libreria para manejar un servo 500 a 2500 us hecha en 2026                                          | Mas avanzada y robusta en términos de POO |
+| [R2627_servoclassv2_demo_v1.py](R2627_servoclassv2_demo_v1.py)     | ServoM#1 | Una demo muy simple que usa la libreria v2                                                          |                                           |
 
 ---
 
@@ -214,12 +216,63 @@ Porque normalmente los componentes físicos usan otros componentes de más bajo 
             o mitad entre 0 y 180º
     """
 
-### Libreria Servo v1
+### Libreria Servo v1 - ver y estudiar
 
 Es la libreria que hice en 2023
 
-### Libreria Servo v2
+[LibServo180v1.py](LibServo180v1.py)
+
+Programa de prueba demo
+
+[R2627_servoclassv1_demo_v1_2.py](R2627_servoclassv1_demo_v1_2.py)
+
+### Libreria Servo v2 - ver y estudiar
+
+es la libreria mejorada en 2026
+
+[LibServo180v2.py](LibServo180v2.py)
+
+Programa demo para libreria v2
+
+[R2627_servoclassv2_demo_v1.py](R2627_servoclassv2_demo_v1.py)
 
 ---
 
-Todo: movimiento suave
+Todo: movimiento suave y rep
+
+```
+def move_to(self,
+                target,
+                step=1,
+                delay_ms=20):
+        """
+        Movimiento suave.
+
+        target   : ángulo destino
+        step     : incremento en grados
+        delay_ms : pausa entre pasos
+        """
+
+        target = max(0, min(180, int(target)))
+
+        current = int(self._angle)
+
+        if current < target:
+
+            for angle in range(current,
+                               target + 1,
+                               step):
+                self.angle = angle
+                sleep_ms(delay_ms)
+
+        elif current > target:
+
+            for angle in range(current,
+                               target - 1,
+                               -step):
+                self.angle = angle
+                sleep_ms(delay_ms)
+
+    def __repr__(self):
+        return f"Servo(pin={self._pin}, angle={self._angle})"
+```
