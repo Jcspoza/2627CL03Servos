@@ -66,8 +66,8 @@ try:
         if deg_servo_str.isdigit():
             deg_servo = int(deg_servo_str)
             if deg_servo >= 0 and deg_servo <= 180:
-                print('Grados = ', deg_servo, 'corresponde a microsegundos = ', us_servo)
                 us_servo = ConverDeg_us(deg_servo)
+                print('Grados = ', deg_servo, 'corresponde a microsegundos = ', us_servo)
             else:
                 print ('Error in Deg, out of range. Deg limitted to 0º or 180º')
         else:
